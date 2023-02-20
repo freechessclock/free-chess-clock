@@ -123,6 +123,7 @@ export default function App() {
   );
   return (
     <div className='bg-neutral-700 w-screen h-screen text-neutral-100'
+      style={{ maxHeight: "-webkit-fill-available" }}
       onKeyDown={() => setTurn(!turn)}
     >
       <Settings
