@@ -25,7 +25,7 @@ export default function App() {
 
   const alarm = useRef<HTMLAudioElement>(new Audio("alarm.mp3"));
   alarm.current.preload = "auto";
-  const click = useRef<HTMLAudioElement>(new Audio("alarm.mp3"));
+  const click = useRef<HTMLAudioElement>(new Audio("click.mp3"));
   click.current.preload = "auto";
 
   const button1 = useRef<HTMLButtonElement>(null);
