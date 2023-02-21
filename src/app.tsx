@@ -23,9 +23,7 @@ export default function App() {
   const countdown2 = useRef<Countdown>(null);
 
   const alarm = useRef<HTMLAudioElement>(new Audio("alarm.mp3"));
-  alarm.current.preload = "auto";
   const click = useRef<HTMLAudioElement>(new Audio("click.mp3"));
-  click.current.preload = "auto";
 
   const button1 = useRef<HTMLButtonElement>(null);
   const button2 = useRef<HTMLButtonElement>(null);
@@ -176,6 +174,7 @@ export default function App() {
       style={{ maxHeight: "-webkit-fill-available" }}
       onKeyDown={() => setTurn(!turn)}
     >
+      <audio></audio>
       <Settings
         open={settings_open}
         setOpen={setSettingsOpen}
