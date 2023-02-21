@@ -29,13 +29,13 @@ export default function App() {
   const button2 = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
-    function touchRegister() {
+    const touchRegister = () => {
       if (notifications) {
         alarm.current?.load();
       }
     }
 
-    function playClick() {
+    const playClick = () => {
       if (notifications) {
         click.current?.play()
       }
@@ -144,7 +144,7 @@ export default function App() {
     </>
   )
 
-  function reset() {
+  const reset = () => {
     setPaused(true);
     setPlayedSound(false);
     setStarted(false);
