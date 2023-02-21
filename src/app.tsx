@@ -10,6 +10,10 @@ declare global {
   }
 }
 
+const audioContext = window.AudioContext || window.webkitAudioContext;
+
+const audio = new audioContext();
+
 const MINUTES_TO_MILLISECONDS = 60000;
 
 export default function App() {
@@ -28,8 +32,6 @@ export default function App() {
   const countdown1 = useRef<Countdown>(null);
   const countdown2 = useRef<Countdown>(null);
 
-  const AudioContext = window.AudioContext || window.webkitAudioContext;
-  const audio_context = useRef<AudioContext>(new AudioContext())
 
   const alarm = useRef<HTMLAudioElement>(new Audio("alarm.mp3"));
   alarm.current.preload = "auto";
@@ -60,10 +62,6 @@ export default function App() {
         click.current.play()
       }
     })
-
-    return () => {
-      audio_context.current.close()
-    }
   }, [])
 
   useEffect(() => {
