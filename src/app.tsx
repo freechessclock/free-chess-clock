@@ -20,7 +20,6 @@ export default function App() {
   const [time1, setTime1] = useState<number>(minutes_per_player1 * MINUTES_TO_MILLISECONDS);
   const [time2, setTime2] = useState<number>(minutes_per_player2 * MINUTES_TO_MILLISECONDS);
   const [played_sound, setPlayedSound] = useState(false);
-  const [registered_sound, setRegisteredSound] = useState(false);
   const countdown1 = useRef<Countdown>(null);
   const countdown2 = useRef<Countdown>(null);
 
@@ -35,25 +34,11 @@ export default function App() {
 
   useEffect(() => {
     document.addEventListener("touchstart", () => {
-      if (alarm.current && notifications && !registered_sound) {
+      if (alarm.current && notifications) {
         alarm.current.load();
         alarm.current.currentTime = 0;
-        setRegisteredSound(true);
       }
     });
-    // button1.current?.addEventListener("touchstart", () => {
-    //   if (notifications) {
-    //     click.current.currentTime = 0;
-    //     click.current.play();
-    //   }
-    // });
-    // button2.current?.addEventListener("touchstart", () => {
-    //   if (notifications) {
-    //     click.current.currentTime = 0;
-    //     click.current.play();
-    //   }
-    // });
-
   }, [])
 
   useEffect(() => {
@@ -198,16 +183,16 @@ export default function App() {
             started && turn ? "bg-neutral-800" : "bg-neutral-400 drop-shadow-lg"
           )}
           onClick={() => {
+            if (notifications) {
+              click.current.currentTime = 0;
+              click.current.play();
+            }
             setTurn(true)
             if (started) {
               setTime1(time1 + extra_seconds * 1000);
             }
             setStarted(true);
             setPaused(false);
-            if (notifications) {
-              click.current.currentTime = 0;
-              click.current.play();
-            }
           }}
           disabled={started && turn}
         >
@@ -228,16 +213,16 @@ export default function App() {
             started && !turn ? "bg-neutral-800" : "bg-neutral-400 shadow-lg"
           )}
           onClick={() => {
+            if (notifications) {
+              click.current.currentTime = 0;
+              click.current.play();
+            }
             setTurn(false);
             if (started) {
               setTime2(time2 + extra_seconds * 1000);
             }
             setStarted(true);
             setPaused(false);
-            if (notifications) {
-              click.current.currentTime = 0;
-              click.current.play();
-            }
           }}
           disabled={started && !turn}
         >
