@@ -144,7 +144,7 @@ export default function Settings(props: SettingsProps) {
                       <Switch.Group as={Fragment}>
                         <Switch.Label as="div" className="col-span-3">
                           <span className="text-sm font-medium ">Sound notifications</span>
-                          <div className="text-sm mt-1 text-gray-500">(A sound is played when the game is over)</div>
+                          <div className="text-sm mt-1 text-gray-500">A sound is played when the clock is switched and when the game is over</div>
                         </Switch.Label>
                         <Switch
                           checked={props.notifications}
