@@ -39,6 +39,19 @@ export default function App() {
         alarm.current.currentTime = 0;
       }
     });
+
+    button1.current?.addEventListener("click", () => {
+      if (notifications) {
+        click.current.currentTime = 0;
+        click.current.play()
+      }
+    })
+    button2.current?.addEventListener("click", () => {
+      if (notifications) {
+        click.current.currentTime = 0;
+        click.current.play()
+      }
+    })
   }, [])
 
   useEffect(() => {
@@ -183,10 +196,6 @@ export default function App() {
             started && turn ? "bg-neutral-800" : "bg-neutral-400 drop-shadow-lg"
           )}
           onClick={() => {
-            if (notifications) {
-              click.current.currentTime = 0;
-              click.current.play();
-            }
             setTurn(true)
             if (started) {
               setTime1(time1 + extra_seconds * 1000);
@@ -213,10 +222,6 @@ export default function App() {
             started && !turn ? "bg-neutral-800" : "bg-neutral-400 shadow-lg"
           )}
           onClick={() => {
-            if (notifications) {
-              click.current.currentTime = 0;
-              click.current.play();
-            }
             setTurn(false);
             if (started) {
               setTime2(time2 + extra_seconds * 1000);
