@@ -30,11 +30,6 @@ export default function App() {
         }
       }, 100);
 
-    if (notifications && time1 <= 0 || time2 <= 0) {
-      const audio = new Audio("alarm.mp3")
-      audio.play();
-    }
-
     return () => clearInterval(interval);
   }, [started, paused, time1, time2])
 
@@ -126,11 +121,18 @@ export default function App() {
       </button>
     </>
   );
+
+  const audio = notifications && (time1 <= 0 || time2 <= 0) && (
+    <audio autoPlay>
+      <source src="alarm.mp3"></source>
+    </audio>
+  );
   return (
     <div className='bg-neutral-700 w-screen h-screen text-neutral-100'
       style={{ maxHeight: "-webkit-fill-available" }}
       onKeyDown={() => setTurn(!turn)}
     >
+      {audio}
       <Settings
         open={settings_open}
         setOpen={setSettingsOpen}
