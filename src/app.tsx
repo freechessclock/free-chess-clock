@@ -6,21 +6,25 @@ import Settings from './settings'
 
 
 export default function App() {
-  const [minutes_per_player, setMinutesPerPlayer] = useState(10);
+  const [minutes_per_player1, setMinutesPerPlayer1] = useState(10);
+  const [minutes_per_player2, setMinutesPerPlayer2] = useState(10);
+  const [different_time, setDifferentTime] = useState(false);
   const [extra_seconds, setExtraSeconds] = useState(5);
   const [notifications, setNotifications] = useState(true);
   const [turn, setTurn] = useState(false);
   const [settings_open, setSettingsOpen] = useState(true);
   const [started, setStarted] = useState(false);
   const [paused, setPaused] = useState(true);
-  const [time1, setTime1] = useState<number>(minutes_per_player * 60000);
-  const [time2, setTime2] = useState<number>(minutes_per_player * 60000);
+  const [time1, setTime1] = useState<number>(minutes_per_player1 * 60000);
+  const [time2, setTime2] = useState<number>(minutes_per_player2 * 60000);
   const [played_sound, setPlayedSound] = useState(false);
   const [registered_sound, setRegisteredSound] = useState(false);
   const countdown1 = useRef<Countdown>(null);
   const countdown2 = useRef<Countdown>(null);
 
   const sound = useRef<HTMLAudioElement>(null);
+
+  console.log(minutes_per_player1, minutes_per_player2);
 
   useEffect(() => {
     document.addEventListener("touchstart", () => {
@@ -53,9 +57,9 @@ export default function App() {
   }, [started, paused, time1, time2])
 
   useEffect(() => {
-    setTime1(minutes_per_player * 60000);
-    setTime2(minutes_per_player * 60000);
-  }, [minutes_per_player])
+    setTime1(minutes_per_player1 * 60000);
+    setTime2(minutes_per_player2 * 60000);
+  }, [minutes_per_player1, minutes_per_player2])
 
   useEffect(() => {
     if (started) {
@@ -115,8 +119,8 @@ export default function App() {
     setPaused(true);
     setPlayedSound(false);
     setStarted(false);
-    setTime1(minutes_per_player * 60000);
-    setTime2(minutes_per_player * 60000);
+    setTime1(minutes_per_player1 * 60000);
+    setTime2(minutes_per_player2 * 60000);
     setTurn(false);
     sound.current?.pause();
   }
@@ -152,10 +156,14 @@ export default function App() {
       <Settings
         open={settings_open}
         setOpen={setSettingsOpen}
-        minutes_per_player={minutes_per_player}
+        different_time={different_time}
+        setDifferentTime={setDifferentTime}
+        minutes_per_player1={minutes_per_player2}
+        minutes_per_player2={minutes_per_player1}
         extra_seconds={extra_seconds}
         notifications={notifications}
-        setMinutesPerPlayer={setMinutesPerPlayer}
+        setMinutesPerPlayer1={setMinutesPerPlayer2}
+        setMinutesPerPlayer2={setMinutesPerPlayer1}
         setExtraSeconds={setExtraSeconds}
         setNotifications={setNotifications}
       />

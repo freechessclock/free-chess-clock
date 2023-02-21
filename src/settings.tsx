@@ -3,8 +3,12 @@ import { Dialog, Switch, Transition } from '@headlessui/react'
 import classNames from 'classnames';
 
 interface SettingsProps {
-  minutes_per_player: number;
-  setMinutesPerPlayer: (minutes: number) => void;
+  minutes_per_player1: number;
+  setMinutesPerPlayer1: (minutes: number) => void;
+  minutes_per_player2: number;
+  setMinutesPerPlayer2: (minutes: number) => void;
+  different_time: boolean;
+  setDifferentTime: (val: boolean) => void;
   extra_seconds: number;
   setExtraSeconds: (minutes: number) => void;
   notifications: boolean;
@@ -14,6 +18,29 @@ interface SettingsProps {
 }
 export default function Settings(props: SettingsProps) {
 
+
+  const player_2_time = (
+    <div className='col-span-2 place-self-center w-full' >
+      <label htmlFor="minutes2" className="block text-sm font-medium text-neutral-300">
+        Minutes for player 2
+      </label>
+      <div className="mt-1">
+        <input
+          type="number"
+          name="minutes2"
+          id="minutes2"
+          onChange={(event) => {
+            if (event.target.value) {
+              props.setMinutesPerPlayer2(parseInt(event.target.value))
+            }
+          }}
+          value={props.minutes_per_player2}
+          className="block w-full rounded-md bg-neutral-800 border-gray-300 shadow-sm focus:border-neutral-500 focus:ring-neutral-500 sm:text-sm placeholder:text-neutral-500"
+          placeholder=""
+        />
+      </div>
+    </div>
+  )
   return (
     <Transition.Root show={props.open} as={Fragment}>
       <Dialog as="div" className="relative z-10" onClose={props.setOpen}>
@@ -48,20 +75,25 @@ export default function Settings(props: SettingsProps) {
                     </Dialog.Title>
                     <div className="mt-6 grid gap-6 lg:gap-x-10 grid-cols-4 justify-items-start">
                       <div className='col-span-2 place-self-center w-full' >
-                        <label htmlFor="minutes" className="block text-sm font-medium text-neutral-300">
-                          Minutes per player
+                        <label htmlFor="minutes1" className="block text-sm font-medium text-neutral-300">
+                          {props.different_time ? "Minutes for player 1" : "Minutes per player"}
                         </label>
                         <div className="mt-1">
                           <input
                             type="number"
-                            name="minutes"
-                            id="minutes"
+                            name="minutes1"
+                            id="minutes1"
                             onChange={(event) => {
                               if (event.target.value) {
-                                props.setMinutesPerPlayer(parseInt(event.target.value))
+                                if (props.different_time) {
+                                  props.setMinutesPerPlayer1(parseInt(event.target.value))
+                                } else {
+                                  props.setMinutesPerPlayer1(parseInt(event.target.value))
+                                  props.setMinutesPerPlayer2(parseInt(event.target.value))
+                                }
                               }
                             }}
-                            value={props.minutes_per_player}
+                            value={props.minutes_per_player1}
                             className="block w-full rounded-md bg-neutral-800 border-gray-300 shadow-sm focus:border-neutral-500 focus:ring-neutral-500 sm:text-sm placeholder:text-neutral-500"
                             placeholder=""
                           />
@@ -87,6 +119,28 @@ export default function Settings(props: SettingsProps) {
                           />
                         </div>
                       </div>
+                      {props.different_time && player_2_time}
+                      <Switch.Group as={Fragment}>
+                        <Switch.Label as="div" className="col-span-3">
+                          <span className="text-sm font-medium ">Different times per player</span>
+                        </Switch.Label>
+                        <Switch
+                          checked={props.different_time}
+                          onChange={props.setDifferentTime}
+                          className={classNames(
+                            props.different_time ? 'bg-indigo-600' : 'bg-gray-200',
+                            'relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-neutral-500 focus:ring-offset-2'
+                          )}
+                        >
+                          <span
+                            aria-hidden="true"
+                            className={classNames(
+                              props.different_time ? 'translate-x-5' : 'translate-x-0',
+                              'pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out'
+                            )}
+                          />
+                        </Switch>
+                      </Switch.Group>
                       <Switch.Group as={Fragment}>
                         <Switch.Label as="div" className="col-span-3">
                           <span className="text-sm font-medium ">Sound notifications</span>
