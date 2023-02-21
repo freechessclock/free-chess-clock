@@ -25,7 +25,7 @@ export default function App() {
 
   const alarm = useRef<HTMLAudioElement>(new Audio("alarm.mp3"));
   alarm.current.preload = "auto";
-  const click = useRef<HTMLAudioElement>(new Audio("click.wav"));
+  const click = useRef<HTMLAudioElement>(new Audio("alarm.mp3"));
   click.current.preload = "auto";
 
   const button1 = useRef<HTMLButtonElement>(null);
@@ -34,9 +34,9 @@ export default function App() {
 
   useEffect(() => {
     document.addEventListener("touchstart", () => {
-      if (alarm.current && notifications) {
+      if (notifications) {
         alarm.current.load();
-        alarm.current.currentTime = 0;
+        click.current.load();
       }
     });
 
