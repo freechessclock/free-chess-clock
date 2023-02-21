@@ -4,16 +4,6 @@ import { useEffect, useRef, useState } from 'preact/hooks';
 import Countdown, { CountdownRenderProps } from 'react-countdown';
 import Settings from './settings'
 
-declare global {
-  interface Window {
-    webkitAudioContext: typeof AudioContext
-  }
-}
-
-const audioContext = window.AudioContext || window.webkitAudioContext;
-
-const audio = new audioContext();
-
 const MINUTES_TO_MILLISECONDS = 60000;
 
 export default function App() {
@@ -32,7 +22,6 @@ export default function App() {
   const countdown1 = useRef<Countdown>(null);
   const countdown2 = useRef<Countdown>(null);
 
-
   const alarm = useRef<HTMLAudioElement>(new Audio("alarm.mp3"));
   alarm.current.preload = "auto";
   const click = useRef<HTMLAudioElement>(new Audio("click.mp3"));
@@ -41,28 +30,30 @@ export default function App() {
   const button1 = useRef<HTMLButtonElement>(null);
   const button2 = useRef<HTMLButtonElement>(null);
 
-
   useEffect(() => {
-    document.addEventListener("touchstart", () => {
+    function touchRegister() {
       if (notifications) {
         alarm.current.load();
         click.current.load();
       }
-    });
+    }
+    function playClick() {
+      if (notifications) {
+        click.current.currentTime = 0;
+        click.current.play()
+      }
+    }
 
-    button1.current?.addEventListener("click", () => {
-      if (notifications) {
-        click.current.currentTime = 0;
-        click.current.play()
-      }
-    })
-    button2.current?.addEventListener("click", () => {
-      if (notifications) {
-        click.current.currentTime = 0;
-        click.current.play()
-      }
-    })
-  }, [])
+    document.addEventListener("touchstart", touchRegister);
+    button1.current?.addEventListener("click", playClick)
+    button2.current?.addEventListener("click", playClick)
+
+    return () => {
+      document.removeEventListener("touchstart", touchRegister);
+      button1.current?.removeEventListener("click", playClick);
+      button2.current?.removeEventListener("click", playClick);
+    }
+  }, [notifications])
 
   useEffect(() => {
     if (!different_time) {
