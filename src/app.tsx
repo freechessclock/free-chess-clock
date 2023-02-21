@@ -21,7 +21,7 @@ export default function App() {
   useEffect(() => {
     const interval = setInterval(
       () => {
-        if (started && !paused) {
+        if (started && !paused && time1 > 0 && time2 > 0) {
           if (turn) {
             setTime2(time2 - 100);
           } else {
@@ -30,12 +30,17 @@ export default function App() {
         }
       }, 100);
 
+    if (notifications && time1 <= 0 || time2 <= 0) {
+      const audio = new Audio("alarm.mp3")
+      audio.play();
+    }
+
     return () => clearInterval(interval);
   }, [started, paused, time1, time2])
 
   useEffect(() => {
-    setTime1(minutes_per_player * 60000);
-    setTime2(minutes_per_player * 60000);
+    setTime1(minutes_per_player * 100);
+    setTime2(minutes_per_player * 100);
   }, [minutes_per_player])
 
   useEffect(() => {
