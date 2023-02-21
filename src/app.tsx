@@ -29,6 +29,10 @@ export default function App() {
   const click = useRef<HTMLAudioElement>(new Audio("click.wav"));
   click.current.preload = "auto";
 
+  const button1 = useRef<HTMLButtonElement>(null);
+  const button2 = useRef<HTMLButtonElement>(null);
+
+
   useEffect(() => {
     document.addEventListener("touchstart", () => {
       if (alarm.current && notifications && !registered_sound) {
@@ -37,7 +41,14 @@ export default function App() {
         setRegisteredSound(true);
       }
     });
-  })
+    button1.current?.addEventListener("touchstart", () => {
+      click.current.play();
+    });
+    button2.current?.addEventListener("touchstart", () => {
+      click.current.play();
+    });
+
+  }, [])
 
   useEffect(() => {
     if (!different_time) {
@@ -176,6 +187,7 @@ export default function App() {
       />
       <div className='flex flex-col lg:flex-row h-full p-4 gap-4'>
         <button
+          ref={button1}
           className={classNames('rotate-180 lg:rotate-0 p-4 grow w-full flex items-center justify-center h-full  rounded-xl',
             started && turn ? "bg-neutral-800" : "bg-neutral-400 drop-shadow-lg"
           )}
@@ -204,6 +216,7 @@ export default function App() {
           {icons}
         </div>
         <button
+          ref={button2}
           className={classNames('p-4 grow w-full flex items-center justify-center h-full  rounded-xl',
             started && !turn ? "bg-neutral-800" : "bg-neutral-400 shadow-lg"
           )}
