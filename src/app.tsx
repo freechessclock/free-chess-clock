@@ -5,6 +5,8 @@ import Countdown, { CountdownRenderProps } from 'react-countdown';
 import Settings from './settings'
 
 const MINUTES_TO_MILLISECONDS = 60000;
+const SECONDS_TO_MILLISECONDS = 1000;
+const UPDATE_INTERVAL = 250;
 
 export default function App() {
   const [minutes_per_player1, setMinutesPerPlayer1] = useState(10);
@@ -19,6 +21,10 @@ export default function App() {
   const [time1, setTime1] = useState<number>(minutes_per_player1 * MINUTES_TO_MILLISECONDS);
   const [time2, setTime2] = useState<number>(minutes_per_player2 * MINUTES_TO_MILLISECONDS);
   const [played_sound, setPlayedSound] = useState(false);
+  const [inc1, setInc1] = useState(false);
+  const [inc2, setInc2] = useState(false);
+  const [dec1, setDec1] = useState(false);
+  const [dec2, setDec2] = useState(false);
   const countdown1 = useRef<Countdown>(null);
   const countdown2 = useRef<Countdown>(null);
 
@@ -60,16 +66,46 @@ export default function App() {
   }, [different_time, minutes_per_player1]);
 
   useEffect(() => {
+    let new_time1 = time1
+    if (dec1) {
+      new_time1 -= UPDATE_INTERVAL;
+    }
+    if (inc1) {
+      new_time1 += extra_seconds * SECONDS_TO_MILLISECONDS;
+    }
+
+    let new_time2 = time2
+    if (dec2) {
+      new_time2 -= UPDATE_INTERVAL;
+    }
+    if (inc2) {
+      new_time2 += extra_seconds * SECONDS_TO_MILLISECONDS
+    }
+
+    if (new_time1 !== time1) {
+      setTime1(new_time1);
+    }
+    if (new_time2 !== time2) {
+      setTime2(new_time2);
+    }
+
+    setDec1(false);
+    setDec2(false);
+    setInc1(false);
+    setInc2(false);
+  }, [dec1, dec2, inc1, inc2])
+
+  useEffect(() => {
     const timeout = setTimeout(
       () => {
         if (started && !paused && time1 > 0 && time2 > 0) {
           if (turn) {
-            setTime2(time2 - 100);
+            setDec2(true);
           } else {
-            setTime1(time1 - 100);
+            setDec1(true);
           }
         }
-      }, 100);
+      }, UPDATE_INTERVAL);
 
     if (started && alarm.current && !played_sound && (time1 <= 0 || time2 <= 0)) {
       alarm.current?.play();
@@ -108,9 +144,9 @@ export default function App() {
       if (started) {
         setTurn(!turn)
         if (turn) {
-          setTime2(time2 + extra_seconds * 1000);
+          setInc2(true);
         } else {
-          setTime1(time1 + extra_seconds * 1000);
+          setInc1(true);
         }
       }
     }
@@ -208,7 +244,7 @@ export default function App() {
           onClick={() => {
             setTurn(true)
             if (started) {
-              setTime1(time1 + extra_seconds * 1000);
+              setInc1(true);
             }
             setStarted(true);
             setPaused(false);
@@ -234,7 +270,7 @@ export default function App() {
           onClick={() => {
             setTurn(false);
             if (started) {
-              setTime2(time2 + extra_seconds * 1000);
+              setInc2(true);
             }
             setStarted(true);
             setPaused(false);
