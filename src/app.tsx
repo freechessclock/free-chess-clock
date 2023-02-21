@@ -37,6 +37,13 @@ export default function App() {
       }
     });
   })
+
+  useEffect(() => {
+    if (!different_time) {
+      setMinutesPerPlayer1(minutes_per_player2);
+    }
+  }, [different_time, minutes_per_player1]);
+
   useEffect(() => {
     const interval = setInterval(
       () => {
@@ -59,7 +66,7 @@ export default function App() {
   useEffect(() => {
     setTime1(minutes_per_player1 * 60000);
     setTime2(minutes_per_player2 * 60000);
-  }, [minutes_per_player1, minutes_per_player2])
+  }, [minutes_per_player1, minutes_per_player2, different_time])
 
   useEffect(() => {
     if (started) {
