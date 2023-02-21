@@ -5,6 +5,8 @@ import Countdown, { CountdownRenderProps } from 'react-countdown';
 import Settings from './settings'
 
 
+const MINUTES_TO_MILLISECONDS = 60000;
+
 export default function App() {
   const [minutes_per_player1, setMinutesPerPlayer1] = useState(10);
   const [minutes_per_player2, setMinutesPerPlayer2] = useState(10);
@@ -15,24 +17,23 @@ export default function App() {
   const [settings_open, setSettingsOpen] = useState(true);
   const [started, setStarted] = useState(false);
   const [paused, setPaused] = useState(true);
-  const [time1, setTime1] = useState<number>(minutes_per_player1 * 60000);
-  const [time2, setTime2] = useState<number>(minutes_per_player2 * 60000);
+  const [time1, setTime1] = useState<number>(minutes_per_player1 * MINUTES_TO_MILLISECONDS);
+  const [time2, setTime2] = useState<number>(minutes_per_player2 * MINUTES_TO_MILLISECONDS);
   const [played_sound, setPlayedSound] = useState(false);
   const [registered_sound, setRegisteredSound] = useState(false);
   const countdown1 = useRef<Countdown>(null);
   const countdown2 = useRef<Countdown>(null);
 
-  const sound = useRef<HTMLAudioElement>(null);
-
-  console.log(minutes_per_player1, minutes_per_player2);
+  const alarm = useRef<HTMLAudioElement>(new Audio("alarm.mp3"));
+  alarm.current.preload = "auto";
+  const click = useRef<HTMLAudioElement>(new Audio("click.wav"));
+  click.current.preload = "auto";
 
   useEffect(() => {
     document.addEventListener("touchstart", () => {
-      if (sound.current && notifications && !registered_sound) {
-        sound.current.src = "alarm.mp3";
-        sound.current.play();
-        sound.current.pause();
-        sound.current.currentTime = 0;
+      if (alarm.current && notifications && !registered_sound) {
+        alarm.current.load();
+        alarm.current.currentTime = 0;
         setRegisteredSound(true);
       }
     });
@@ -56,16 +57,17 @@ export default function App() {
         }
       }, 100);
 
-    if (started && sound.current && !played_sound && (time1 <= 0 || time2 <= 0)) {
-      sound.current.play();
+    if (started && alarm.current && !played_sound && (time1 <= 0 || time2 <= 0)) {
+      alarm.current.currentTime = 0;
+      alarm.current.play();
       setPlayedSound(true);
     }
     return () => clearInterval(interval);
-  }, [started, paused, time1, time2])
+  }, [started, paused, time1, time2, played_sound])
 
   useEffect(() => {
-    setTime1(minutes_per_player1 * 60000);
-    setTime2(minutes_per_player2 * 60000);
+    setTime1(minutes_per_player1 * MINUTES_TO_MILLISECONDS);
+    setTime2(minutes_per_player2 * MINUTES_TO_MILLISECONDS);
   }, [minutes_per_player1, minutes_per_player2, different_time])
 
   useEffect(() => {
@@ -116,7 +118,9 @@ export default function App() {
             < PlayIcon className='w-16 bg-neutral-600 rounded-lg' />
           </button >
           :
-          <button onClick={() => { setPaused(true) }}>
+          <button onClick={() => {
+            setPaused(true)
+          }}>
             <PauseIcon className='w-16 bg-neutral-600 rounded-lg' />
           </button>
       }
@@ -127,10 +131,9 @@ export default function App() {
     setPaused(true);
     setPlayedSound(false);
     setStarted(false);
-    setTime1(minutes_per_player1 * 60000);
-    setTime2(minutes_per_player2 * 60000);
+    setTime1(minutes_per_player1 * MINUTES_TO_MILLISECONDS);
+    setTime2(minutes_per_player2 * MINUTES_TO_MILLISECONDS);
     setTurn(false);
-    sound.current?.pause();
   }
 
   const icons = (
@@ -145,7 +148,6 @@ export default function App() {
       {pause_icons}
       <button
         onClick={() => {
-          reset();
           setSettingsOpen(true);
         }}
       >
@@ -158,9 +160,6 @@ export default function App() {
       style={{ maxHeight: "-webkit-fill-available" }}
       onKeyDown={() => setTurn(!turn)}
     >
-      {notifications && <audio ref={sound}>
-        <source src="alarm.mp3"></source>
-      </audio>}
       <Settings
         open={settings_open}
         setOpen={setSettingsOpen}
@@ -178,7 +177,7 @@ export default function App() {
       <div className='flex flex-col lg:flex-row h-full p-4 gap-4'>
         <button
           className={classNames('rotate-180 lg:rotate-0 p-4 grow w-full flex items-center justify-center h-full  rounded-xl',
-            started && turn ? "bg-neutral-800" : "bg-neutral-400"
+            started && turn ? "bg-neutral-800" : "bg-neutral-400 drop-shadow-lg"
           )}
           onClick={() => {
             setTurn(true)
@@ -187,6 +186,9 @@ export default function App() {
             }
             setStarted(true);
             setPaused(false);
+            if (notifications) {
+              click.current.play();
+            }
           }}
           disabled={started && turn}
         >
@@ -203,7 +205,7 @@ export default function App() {
         </div>
         <button
           className={classNames('p-4 grow w-full flex items-center justify-center h-full  rounded-xl',
-            started && !turn ? "bg-neutral-800" : "bg-neutral-400"
+            started && !turn ? "bg-neutral-800" : "bg-neutral-400 shadow-lg"
           )}
           onClick={() => {
             setTurn(false);
@@ -212,6 +214,9 @@ export default function App() {
             }
             setStarted(true);
             setPaused(false);
+            if (notifications) {
+              click.current.play();
+            }
           }}
           disabled={started && !turn}
         >
@@ -224,6 +229,6 @@ export default function App() {
           />
         </button>
       </div>
-    </div>
+    </div >
   )
 }
