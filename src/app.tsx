@@ -32,6 +32,7 @@ export default function App() {
     const touchRegister = () => {
       if (notifications) {
         alarm.current?.load();
+        click.current?.load();
       }
     }
 
