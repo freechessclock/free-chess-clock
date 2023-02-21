@@ -78,7 +78,7 @@ export default function App() {
       alarm.current.play();
       setPlayedSound(true);
     }
-    return () => clearInterval(interval);
+    return () => { clearInterval(interval) };
   }, [started, paused, time1, time2, played_sound])
 
   useEffect(() => {
