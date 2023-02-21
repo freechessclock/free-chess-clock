@@ -39,8 +39,8 @@ export default function App() {
   }, [started, paused, time1, time2])
 
   useEffect(() => {
-    setTime1(minutes_per_player * 100);
-    setTime2(minutes_per_player * 100);
+    setTime1(minutes_per_player * 60000);
+    setTime2(minutes_per_player * 60000);
   }, [minutes_per_player])
 
   useEffect(() => {
