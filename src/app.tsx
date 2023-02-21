@@ -18,6 +18,17 @@ export default function App() {
   const countdown1 = useRef<Countdown>(null);
   const countdown2 = useRef<Countdown>(null);
 
+  const sound = useRef<HTMLAudioElement>(null);
+
+  useEffect(() => {
+    document.addEventListener("touchstart", () => {
+      if (sound.current && notifications) {
+        sound.current.src = "alarm.mp3";
+        sound.current.play();
+        sound.current.pause();
+      }
+    });
+  })
   useEffect(() => {
     const interval = setInterval(
       () => {
@@ -30,6 +41,9 @@ export default function App() {
         }
       }, 100);
 
+    if (sound.current && (time1 <= 0 || time2 <= 0)) {
+      sound.current.play();
+    }
     return () => clearInterval(interval);
   }, [started, paused, time1, time2])
 
@@ -100,6 +114,7 @@ export default function App() {
           setStarted(false);
           setPaused(true);
           setTurn(false);
+          sound.current?.pause();
           setTime1(minutes_per_player * 60000);
           setTime2(minutes_per_player * 60000);
         }}
@@ -110,6 +125,7 @@ export default function App() {
       <button
         onClick={() => {
           setStarted(false);
+          sound.current?.pause();
           setPaused(true);
           setSettingsOpen(true);
           setTurn(false);
@@ -121,18 +137,14 @@ export default function App() {
       </button>
     </>
   );
-
-  const audio = notifications && (time1 <= 0 || time2 <= 0) && (
-    <audio autoPlay>
-      <source src="alarm.mp3"></source>
-    </audio>
-  );
   return (
     <div className='bg-neutral-700 w-screen h-screen text-neutral-100'
       style={{ maxHeight: "-webkit-fill-available" }}
       onKeyDown={() => setTurn(!turn)}
     >
-      {audio}
+      {notifications && <audio ref={sound}>
+        <source src="alarm.mp3"></source>
+      </audio>}
       <Settings
         open={settings_open}
         setOpen={setSettingsOpen}
