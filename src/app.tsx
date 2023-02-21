@@ -91,7 +91,7 @@ export default function App() {
   const renderer = ({ hours, formatted }: CountdownRenderProps) => {
     return (
       <div className={classNames('w-full h-full grow flex items-center justify-center', { "text-7xl lg:text-8xl": hours !== 0 }, { "text-8xl lg:text-9xl": hours === 0 })}>
-        {hours !== 0 ? `${formatted.hours}:` : <></>} {formatted.minutes}:{formatted.seconds}
+        {hours !== 0 ? `${formatted.hours}:` : <></>}{formatted.minutes}:{formatted.seconds}
       </div >
     );
   };
