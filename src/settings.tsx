@@ -1,7 +1,5 @@
 import { Fragment } from 'preact'
 import { Dialog, Switch, Transition } from '@headlessui/react'
-import { CheckIcon } from '@heroicons/react/24/outline'
-import { useState } from 'preact/hooks'
 import classNames from 'classnames';
 
 interface SettingsProps {
@@ -58,7 +56,11 @@ export default function Settings(props: SettingsProps) {
                             type="number"
                             name="minutes"
                             id="minutes"
-                            onChange={(event) => { props.setMinutesPerPlayer(parseInt(event.target.value)) }}
+                            onChange={(event) => {
+                              if (event.target.value) {
+                                props.setMinutesPerPlayer(parseInt(event.target.value))
+                              }
+                            }}
                             value={props.minutes_per_player}
                             className="block w-full rounded-md bg-neutral-800 border-gray-300 shadow-sm focus:border-neutral-500 focus:ring-neutral-500 sm:text-sm placeholder:text-neutral-500"
                             placeholder=""
@@ -66,15 +68,19 @@ export default function Settings(props: SettingsProps) {
                         </div>
                       </div>
                       <div className='col-span-2 place-self-center w-full'>
-                        <label htmlFor="minutes" className="block text-sm font-medium text-neutral-300">
+                        <label htmlFor="seconds" className="block text-sm font-medium text-neutral-300">
                           Extra seconds per turn
                         </label>
                         <div className="mt-1">
                           <input
                             type="number"
-                            name="minutes"
-                            id="minutes"
-                            onChange={(event) => { props.setExtraSeconds(parseInt(event.target.value)) }}
+                            name="seconds"
+                            id="seconds"
+                            onChange={(event) => {
+                              if (event.target.value) {
+                                props.setExtraSeconds(parseInt(event.target.value))
+                              }
+                            }}
                             value={props.extra_seconds}
                             className="block w-full rounded-md bg-neutral-800 border-gray-300 shadow-sm focus:border-neutral-500 focus:ring-neutral-500 sm:text-sm placeholder:text-neutral-500"
                             placeholder=""
