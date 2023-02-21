@@ -31,8 +31,8 @@ export default function App() {
   useEffect(() => {
     function touchRegister() {
       if (notifications) {
-        alarm.current?.load();
-        click.current?.load();
+        alarm.current?.play();
+        alarm.current?.pause();
       }
     }
     function playClick() {
