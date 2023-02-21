@@ -15,6 +15,7 @@ export default function App() {
   const [paused, setPaused] = useState(true);
   const [time1, setTime1] = useState<number>(minutes_per_player * 60000);
   const [time2, setTime2] = useState<number>(minutes_per_player * 60000);
+  const [played_sound, setPlayedSound] = useState(false);
   const countdown1 = useRef<Countdown>(null);
   const countdown2 = useRef<Countdown>(null);
 
@@ -26,6 +27,7 @@ export default function App() {
         sound.current.src = "alarm.mp3";
         sound.current.play();
         sound.current.pause();
+        sound.current.currentTime = 0;
       }
     });
   })
@@ -41,8 +43,9 @@ export default function App() {
         }
       }, 100);
 
-    if (sound.current && (time1 <= 0 || time2 <= 0)) {
+    if (sound.current && !played_sound && (time1 <= 0 || time2 <= 0)) {
       sound.current.play();
+      setPlayedSound(true);
     }
     return () => clearInterval(interval);
   }, [started, paused, time1, time2])
@@ -107,16 +110,21 @@ export default function App() {
     </>
   )
 
+  function reset() {
+    setPaused(true);
+    setPlayedSound(false);
+    setStarted(false);
+    setTime1(minutes_per_player * 60000);
+    setTime2(minutes_per_player * 60000);
+    setTurn(false);
+    sound.current?.pause();
+  }
+
   const icons = (
     <>
       <button
         onClick={() => {
-          setStarted(false);
-          setPaused(true);
-          setTurn(false);
-          sound.current?.pause();
-          setTime1(minutes_per_player * 60000);
-          setTime2(minutes_per_player * 60000);
+          reset();
         }}
       >
         <ArrowPathIcon className='w-16 bg-neutral-600 rounded-lg' />
@@ -124,13 +132,8 @@ export default function App() {
       {pause_icons}
       <button
         onClick={() => {
-          setStarted(false);
-          sound.current?.pause();
-          setPaused(true);
+          reset();
           setSettingsOpen(true);
-          setTurn(false);
-          setTime1(minutes_per_player * 60000);
-          setTime2(minutes_per_player * 60000);
         }}
       >
         <Cog6ToothIcon className='w-16 bg-neutral-600 rounded-lg' />
