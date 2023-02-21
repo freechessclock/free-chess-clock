@@ -21,7 +21,7 @@ export default function App() {
   const [played_sound, setPlayedSound] = useState(false);
   const countdown1 = useRef<Countdown>(null);
   const countdown2 = useRef<Countdown>(null);
-
+  const [registered, setRegistered] = useState(false);
   const alarm = useRef<HTMLAudioElement>(new Audio("alarm.mp3"));
   const click = useRef<HTMLAudioElement>(new Audio("click.mp3"));
 
@@ -30,9 +30,10 @@ export default function App() {
 
   useEffect(() => {
     function touchRegister() {
-      if (notifications) {
+      if (notifications && !registered) {
         alarm.current.load();
         click.current.load();
+        setRegistered(true);
       }
     }
     function playClick() {
@@ -51,7 +52,7 @@ export default function App() {
       button1.current?.removeEventListener("click", playClick);
       button2.current?.removeEventListener("click", playClick);
     }
-  }, [notifications])
+  }, [notifications, registered])
 
   useEffect(() => {
     if (!different_time) {
