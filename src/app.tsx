@@ -141,9 +141,9 @@ export default function App() {
         setExtraSeconds={setExtraSeconds}
         setNotifications={setNotifications}
       />
-      <div className='flex flex-col sm:flex-row h-full p-4 gap-4'>
+      <div className='flex flex-col lg:flex-row h-full p-4 gap-4'>
         <button
-          className={classNames('rotate-180 sm:rotate-0 p-4 grow w-full flex items-center justify-center h-full  rounded-xl',
+          className={classNames('rotate-180 lg:rotate-0 p-4 grow w-full flex items-center justify-center h-full  rounded-xl',
             started && turn ? "bg-neutral-800" : "bg-neutral-400"
           )}
           onClick={() => {
@@ -164,7 +164,7 @@ export default function App() {
             controlled={true}
           />
         </button>
-        <div className='flex sm:flex-col sm:h-full justify-center gap-16 h-40 lg:w-40'>
+        <div className='flex lg:flex-col lg:h-full justify-center gap-16 h-40 lg:w-40'>
           {icons}
         </div>
         <button
