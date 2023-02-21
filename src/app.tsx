@@ -43,7 +43,7 @@ export default function App() {
         }
       }, 100);
 
-    if (sound.current && !played_sound && (time1 <= 0 || time2 <= 0)) {
+    if (started && sound.current && !played_sound && (time1 <= 0 || time2 <= 0)) {
       sound.current.play();
       setPlayedSound(true);
     }
