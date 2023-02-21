@@ -16,6 +16,7 @@ export default function App() {
   const [time1, setTime1] = useState<number>(minutes_per_player * 60000);
   const [time2, setTime2] = useState<number>(minutes_per_player * 60000);
   const [played_sound, setPlayedSound] = useState(false);
+  const [registered_sound, setRegisteredSound] = useState(false);
   const countdown1 = useRef<Countdown>(null);
   const countdown2 = useRef<Countdown>(null);
 
@@ -23,11 +24,12 @@ export default function App() {
 
   useEffect(() => {
     document.addEventListener("touchstart", () => {
-      if (sound.current && notifications) {
+      if (sound.current && notifications && !registered_sound) {
         sound.current.src = "alarm.mp3";
         sound.current.play();
         sound.current.pause();
         sound.current.currentTime = 0;
+        setRegisteredSound(true);
       }
     });
   })
