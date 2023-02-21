@@ -88,14 +88,13 @@ export default function App() {
     return () => { window.removeEventListener('keypress', callback) };
   }, [started, setTurn, turn]);
 
-  const renderer = ({ formatted }: CountdownRenderProps) => {
+  const renderer = ({ hours, formatted }: CountdownRenderProps) => {
     return (
       <div className='w-full h-full grow flex items-center justify-center text-8xl lg:text-9xl '>
-        {formatted.minutes}:{formatted.seconds}
+        {hours !== 0 ? `${formatted.hours}:` : <></>}{formatted.minutes}:{formatted.seconds}
       </div>
     );
   };
-
 
   const pause_icons = started && (
     <>
