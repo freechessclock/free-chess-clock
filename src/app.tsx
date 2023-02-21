@@ -4,6 +4,11 @@ import { useEffect, useRef, useState } from 'preact/hooks';
 import Countdown, { CountdownRenderProps } from 'react-countdown';
 import Settings from './settings'
 
+declare global {
+  interface Window {
+    webkitAudioContext: typeof AudioContext
+  }
+}
 
 const MINUTES_TO_MILLISECONDS = 60000;
 
@@ -23,7 +28,9 @@ export default function App() {
   const countdown1 = useRef<Countdown>(null);
   const countdown2 = useRef<Countdown>(null);
 
+  const AudioContext = window.AudioContext || window.webkitAudioContext;
   const audio_context = useRef<AudioContext>(new AudioContext())
+
   const alarm = useRef<HTMLAudioElement>(new Audio("alarm.mp3"));
   alarm.current.preload = "auto";
   const click = useRef<HTMLAudioElement>(new Audio("click.mp3"));
