@@ -41,12 +41,18 @@ export default function App() {
         setRegisteredSound(true);
       }
     });
-    button1.current?.addEventListener("touchstart", () => {
-      click.current.play();
-    });
-    button2.current?.addEventListener("touchstart", () => {
-      click.current.play();
-    });
+    // button1.current?.addEventListener("touchstart", () => {
+    //   if (notifications) {
+    //     click.current.currentTime = 0;
+    //     click.current.play();
+    //   }
+    // });
+    // button2.current?.addEventListener("touchstart", () => {
+    //   if (notifications) {
+    //     click.current.currentTime = 0;
+    //     click.current.play();
+    //   }
+    // });
 
   }, [])
 
@@ -199,6 +205,7 @@ export default function App() {
             setStarted(true);
             setPaused(false);
             if (notifications) {
+              click.current.currentTime = 0;
               click.current.play();
             }
           }}
@@ -228,6 +235,7 @@ export default function App() {
             setStarted(true);
             setPaused(false);
             if (notifications) {
+              click.current.currentTime = 0;
               click.current.play();
             }
           }}
