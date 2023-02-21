@@ -22,7 +22,9 @@ export default function App() {
   const countdown1 = useRef<Countdown>(null);
   const countdown2 = useRef<Countdown>(null);
   const alarm = useRef<HTMLAudioElement>(new Audio("alarm.mp3"));
+  alarm.current.loop = true;
   const click = useRef<HTMLAudioElement>(new Audio("click.mp3"));
+  click.current.loop = true;
 
   const button1 = useRef<HTMLButtonElement>(null);
   const button2 = useRef<HTMLButtonElement>(null);
@@ -36,7 +38,6 @@ export default function App() {
     }
     function playClick() {
       if (notifications) {
-        click.current.currentTime = 0;
         click.current.play()
       }
     }
@@ -71,7 +72,6 @@ export default function App() {
       }, 100);
 
     if (started && alarm.current && !played_sound && (time1 <= 0 || time2 <= 0)) {
-      alarm.current.currentTime = 0;
       alarm.current.play();
       setPlayedSound(true);
     }
