@@ -31,10 +31,10 @@ export default function App() {
   useEffect(() => {
     function touchRegister() {
       if (notifications) {
-        alarm.current?.play();
-        alarm.current?.pause();
+        alarm.current?.load();
       }
     }
+
     function playClick() {
       if (notifications) {
         click.current?.play()
@@ -59,7 +59,7 @@ export default function App() {
   }, [different_time, minutes_per_player1]);
 
   useEffect(() => {
-    const interval = setInterval(
+    const timeout = setTimeout(
       () => {
         if (started && !paused && time1 > 0 && time2 > 0) {
           if (turn) {
@@ -74,7 +74,7 @@ export default function App() {
       alarm.current?.play();
       setPlayedSound(true);
     }
-    return () => { clearInterval(interval) };
+    return () => { clearTimeout(timeout) };
   }, [started, paused, time1, time2, played_sound])
 
   useEffect(() => {
@@ -106,12 +106,17 @@ export default function App() {
     const callback = () => {
       if (started) {
         setTurn(!turn)
+        if (turn) {
+          setTime2(time2 + extra_seconds * 1000);
+        } else {
+          setTime1(time1 + extra_seconds * 1000);
+        }
       }
     }
     window.addEventListener('keypress', callback);
 
     return () => { window.removeEventListener('keypress', callback) };
-  }, [started, setTurn, turn]);
+  }, [started, setTurn, turn, time1, time2,]);
 
   const renderer = ({ hours, formatted }: CountdownRenderProps) => {
     const time = hours !== 0 ? `${formatted.hours}:${formatted.minutes}:${formatted.seconds}` : `${formatted.minutes}:${formatted.seconds}`
@@ -161,6 +166,7 @@ export default function App() {
       <button
         onClick={() => {
           setSettingsOpen(true);
+          setPaused(true);
         }}
       >
         <Cog6ToothIcon className='w-16 bg-neutral-600 rounded-lg' />
