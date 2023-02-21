@@ -90,7 +90,7 @@ export default function App() {
 
   const renderer = ({ hours, formatted }: CountdownRenderProps) => {
     return (
-      <div className='w-full h-full grow flex items-center justify-center text-8xl lg:text-9xl '>
+      <div className={classNames('w-full h-full grow flex items-center justify-center text-8xl lg:text-9xl', { "text-7xl lg:text-8xl": hours })}>
         {hours !== 0 ? `${formatted.hours}:` : <></>}{formatted.minutes}:{formatted.seconds}
       </div>
     );
