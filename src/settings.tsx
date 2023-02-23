@@ -164,7 +164,7 @@ export default function Settings(props: SettingsProps) {
                         </Switch>
                       </Switch.Group>
                       <div className='hidden lg:block col-span-4 text-center px-8'>
-                        Click either clock to start and then press any keyboard key to switch the clock.
+                        Click either clock to start and then press any keyboard character key (A-Z) or the Space bar to switch the clock.
                       </div>
                     </div>
                   </div>

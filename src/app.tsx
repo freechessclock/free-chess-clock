@@ -1,4 +1,4 @@
-import { ArrowPathIcon, Cog6ToothIcon, PauseIcon, PlayIcon } from '@heroicons/react/24/outline';
+import { ArrowLongRightIcon, ArrowPathIcon, Cog6ToothIcon, PauseIcon, PlayIcon } from '@heroicons/react/24/outline';
 import classNames from 'classnames';
 import { useEffect, useRef, useState } from 'preact/hooks';
 import Countdown, { CountdownRenderProps } from 'react-countdown';
@@ -7,6 +7,9 @@ import Settings from './settings'
 const MINUTES_TO_MILLISECONDS = 60000;
 const SECONDS_TO_MILLISECONDS = 1000;
 const UPDATE_INTERVAL = 250;
+
+const codes = new Set(["Space", "KeyA", "KeyB", "KeyC", "KeyD", "KeyE", "KeyF", "KeyG", "KeyH",
+  "KeyI", "KeyJ", "KeyK", "KeyL", "KeyM", "KeyN", "KeyP", "KeyQ", "KeyR", "KeyS", "KeyT", "KeyU", "KeyV", "KeyW", "KeyX", "KeyY", "KeyZ",]);
 
 export default function App() {
   const [minutes_per_player1, setMinutesPerPlayer1] = useState(10);
@@ -140,8 +143,10 @@ export default function App() {
   }, [started, turn, paused])
 
   useEffect(() => {
-    const callback = () => {
-      if (started) {
+    const callback = (e: KeyboardEvent) => {
+      console.log(e);
+      if (started && codes.has(e.code)) {
+        click.current?.play()
         setTurn(!turn)
         if (turn) {
           setInc2(true);
@@ -150,9 +155,9 @@ export default function App() {
         }
       }
     }
-    window.addEventListener('keypress', callback);
+    window.addEventListener('keyup', callback);
 
-    return () => { window.removeEventListener('keypress', callback) };
+    return () => { window.removeEventListener('keyup', callback) };
   }, [started, setTurn, turn, time1, time2,]);
 
   const renderer = ({ hours, formatted }: CountdownRenderProps) => {
@@ -168,11 +173,11 @@ export default function App() {
     <>
       {
         paused ?
-          <button onClick={() => { setPaused(false) }}>
+          <button onClick={() => { setPaused(false) }} aria-label="Resume clock">
             < PlayIcon className='w-16 bg-neutral-600 rounded-lg' />
           </button >
           :
-          <button onClick={() => {
+          <button aria-label="Pause clock" onClick={() => {
             setPaused(true)
           }}>
             <PauseIcon className='w-16 bg-neutral-600 rounded-lg' />
@@ -196,6 +201,7 @@ export default function App() {
         onClick={() => {
           reset();
         }}
+        aria-label="Reset clock"
       >
         <ArrowPathIcon className='w-16 bg-neutral-600 rounded-lg' />
       </button>
@@ -205,6 +211,7 @@ export default function App() {
           setSettingsOpen(true);
           setPaused(true);
         }}
+        aria-label="Open Settings"
       >
         <Cog6ToothIcon className='w-16 bg-neutral-600 rounded-lg' />
       </button>
@@ -213,7 +220,6 @@ export default function App() {
   return (
     <div className='bg-neutral-700 w-screen h-screen text-neutral-100'
       style={{ maxHeight: "-webkit-fill-available" }}
-      onKeyDown={() => setTurn(!turn)}
     >
       <audio ref={click}>
         <source src="click.mp3" type="audio/mpeg" />
@@ -238,8 +244,9 @@ export default function App() {
       <div className='flex flex-col lg:flex-row h-full p-4 gap-4'>
         <button
           ref={button1}
+          aria-label="Switch turn to Player 1"
           className={classNames('rotate-180 lg:rotate-0 p-4 grow w-full flex items-center justify-center h-full  rounded-xl',
-            started && turn ? "bg-neutral-800" : "bg-neutral-400 drop-shadow-lg"
+            started && turn ? "bg-neutral-800" : "bg-neutral-300 text-neutral-800 drop-shadow-lg"
           )}
           onClick={() => {
             setTurn(true)
@@ -264,8 +271,9 @@ export default function App() {
         </div>
         <button
           ref={button2}
+          aria-label="Switch turn to Player 2"
           className={classNames('p-4 grow w-full flex items-center justify-center h-full  rounded-xl',
-            started && !turn ? "bg-neutral-800" : "bg-neutral-400 shadow-lg"
+            started && !turn ? "bg-neutral-800" : "bg-neutral-300 text-neutral-800 shadow-lg"
           )}
           onClick={() => {
             setTurn(false);
