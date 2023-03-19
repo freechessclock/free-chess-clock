@@ -1,12 +1,13 @@
-import { ArrowLongRightIcon, ArrowPathIcon, Cog6ToothIcon, PauseIcon, PlayIcon } from '@heroicons/react/24/outline';
+import { ArrowPathIcon, Cog6ToothIcon, PauseIcon, PlayIcon } from '@heroicons/react/24/outline';
 import classNames from 'classnames';
+import { Suspense } from 'preact/compat';
 import { useEffect, useRef, useState } from 'preact/hooks';
 import Countdown, { CountdownRenderProps } from 'react-countdown';
 import Settings from './settings'
 
 const MINUTES_TO_MILLISECONDS = 60000;
 const SECONDS_TO_MILLISECONDS = 1000;
-const UPDATE_INTERVAL = 250;
+const UPDATE_INTERVAL = 200;
 
 const codes = new Set(["Space", "KeyA", "KeyB", "KeyC", "KeyD", "KeyE", "KeyF", "KeyG", "KeyH",
   "KeyI", "KeyJ", "KeyK", "KeyL", "KeyM", "KeyN", "KeyP", "KeyQ", "KeyR", "KeyS", "KeyT", "KeyU", "KeyV", "KeyW", "KeyX", "KeyY", "KeyZ",]);
@@ -218,82 +219,84 @@ export default function App() {
     </>
   );
   return (
-    <div className='bg-neutral-700 w-screen h-screen text-neutral-100'
-      style={{ maxHeight: "-webkit-fill-available" }}
-    >
-      <audio ref={click}>
-        <source src="click.mp3" type="audio/mpeg" />
-      </audio>
-      <audio ref={alarm}>
-        <source src="alarm.mp3" type="audio/mpeg" />
-      </audio>
-      <Settings
-        open={settings_open}
-        setOpen={setSettingsOpen}
-        different_time={different_time}
-        setDifferentTime={setDifferentTime}
-        minutes_per_player1={minutes_per_player2}
-        minutes_per_player2={minutes_per_player1}
-        extra_seconds={extra_seconds}
-        notifications={notifications}
-        setMinutesPerPlayer1={setMinutesPerPlayer2}
-        setMinutesPerPlayer2={setMinutesPerPlayer1}
-        setExtraSeconds={setExtraSeconds}
-        setNotifications={setNotifications}
-      />
-      <div className='flex flex-col lg:flex-row h-full p-4 gap-4'>
-        <button
-          ref={button1}
-          aria-label="Switch turn to Player 1"
-          className={classNames('rotate-180 lg:rotate-0 p-4 grow w-full flex items-center justify-center h-full  rounded-xl',
-            started && turn ? "bg-neutral-800" : "bg-neutral-300 text-neutral-800 drop-shadow-lg"
-          )}
-          onClick={() => {
-            setTurn(true)
-            if (started) {
-              setInc1(true);
-            }
-            setStarted(true);
-            setPaused(false);
-          }}
-          disabled={started && turn}
-        >
-          <Countdown
-            ref={countdown1}
-            autoStart={false}
-            renderer={renderer}
-            date={time1}
-            controlled={true}
-          />
-        </button>
-        <div className='flex lg:flex-col lg:h-full justify-center gap-16 h-40 lg:w-40'>
-          {icons}
+    <Suspense fallback={<div className="bg-neutral-700 w-screen h-screen" />}>
+      <div className='bg-neutral-700 w-screen h-screen text-neutral-100'
+        style={{ maxHeight: "-webkit-fill-available" }}
+      >
+        <audio ref={click}>
+          <source src="click.mp3" type="audio/mpeg" />
+        </audio>
+        <audio ref={alarm}>
+          <source src="alarm.mp3" type="audio/mpeg" />
+        </audio>
+        <Settings
+          open={settings_open}
+          setOpen={setSettingsOpen}
+          different_time={different_time}
+          setDifferentTime={setDifferentTime}
+          minutes_per_player1={minutes_per_player2}
+          minutes_per_player2={minutes_per_player1}
+          extra_seconds={extra_seconds}
+          notifications={notifications}
+          setMinutesPerPlayer1={setMinutesPerPlayer2}
+          setMinutesPerPlayer2={setMinutesPerPlayer1}
+          setExtraSeconds={setExtraSeconds}
+          setNotifications={setNotifications}
+        />
+        <div className='flex flex-col lg:flex-row h-full p-4 gap-4'>
+          <button
+            ref={button1}
+            aria-label="Switch turn to Player 1"
+            className={classNames('rotate-180 lg:rotate-0 p-4 grow w-full flex items-center justify-center h-full  rounded-xl',
+              started && turn ? "bg-neutral-800" : "bg-neutral-300 text-neutral-800 drop-shadow-lg"
+            )}
+            onClick={() => {
+              setTurn(true)
+              if (started) {
+                setInc1(true);
+              }
+              setStarted(true);
+              setPaused(false);
+            }}
+            disabled={started && turn}
+          >
+            <Countdown
+              ref={countdown1}
+              autoStart={false}
+              renderer={renderer}
+              date={time1}
+              controlled={true}
+            />
+          </button>
+          <div className='flex lg:flex-col lg:h-full justify-center gap-16 h-40 lg:w-40'>
+            {icons}
+          </div>
+          <button
+            ref={button2}
+            aria-label="Switch turn to Player 2"
+            className={classNames('p-4 grow w-full flex items-center justify-center h-full  rounded-xl',
+              started && !turn ? "bg-neutral-800" : "bg-neutral-300 text-neutral-800 shadow-lg"
+            )}
+            onClick={() => {
+              setTurn(false);
+              if (started) {
+                setInc2(true);
+              }
+              setStarted(true);
+              setPaused(false);
+            }}
+            disabled={started && !turn}
+          >
+            <Countdown
+              ref={countdown2}
+              autoStart={false}
+              renderer={renderer}
+              date={time2}
+              controlled={true}
+            />
+          </button>
         </div>
-        <button
-          ref={button2}
-          aria-label="Switch turn to Player 2"
-          className={classNames('p-4 grow w-full flex items-center justify-center h-full  rounded-xl',
-            started && !turn ? "bg-neutral-800" : "bg-neutral-300 text-neutral-800 shadow-lg"
-          )}
-          onClick={() => {
-            setTurn(false);
-            if (started) {
-              setInc2(true);
-            }
-            setStarted(true);
-            setPaused(false);
-          }}
-          disabled={started && !turn}
-        >
-          <Countdown
-            ref={countdown2}
-            autoStart={false}
-            renderer={renderer}
-            date={time2}
-            controlled={true}
-          />
-        </button>
-      </div>
-    </div >
+      </div >
+    </Suspense>
   )
 }

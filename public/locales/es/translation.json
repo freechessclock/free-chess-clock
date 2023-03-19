@@ -1,0 +1,12 @@
+{
+  "settings-title": "Configuración",
+  "minutes-label":"Total de minutos por jugador",
+  "increment-label": "Segundos adicionales por turno",
+  "different-times-label": "Tiempos diferentes por jugador",
+  "sound-notification-label": "Notificaciones de sonido",
+  "sound-notification-sublabel": "Se reproduce un sonido cuando el reloj cambia y cuando termina el juego",
+  "done-button": "Terminado",
+  "player1-minutes-label": "Minutos por jugador 1",
+  "player2-minutes-label": "Minutos por jugador 2",
+  "keyboard-instructions": "Haga clic en cualquier reloj para comenzar y luego presione cualquier tecla de carácter del teclado (A-Z) o la barra espaciadora para cambiar el reloj."
+}

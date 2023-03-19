@@ -1,0 +1,12 @@
+{
+  "settings-title": "Settings",
+  "minutes-label":"Total minutes per player",
+  "increment-label": "Extra seconds per turn",
+  "different-times-label": "Different times per player",
+  "sound-notification-label": "Sound notifications",
+  "sound-notification-sublabel": "A sound plays when the clock switches and when the game finishes.",
+  "done-button": "Done",
+  "player1-minutes-label": "Minutes for player 1",
+  "player2-minutes-label": "Minutes for player 2",
+  "keyboard-instructions": "Click either clock to start and then press any keyboard character key (A-Z) or the space bar to switch the clock."
+}

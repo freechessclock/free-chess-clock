@@ -17,10 +17,16 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve",
+    // "jsx": "preserve",
+    "jsx": "react-jsx",
+    "jsxImportSource": "preact",
     "baseUrl": ".",
     "strictNullChecks": true,
     "incremental": true,
+    "paths": {
+      "react": ["./node_modules/preact/compat/"],
+      "react-dom": ["./node_modules/preact/compat/"]
+    },
   },
   "include": [
     "next-env.d.ts",

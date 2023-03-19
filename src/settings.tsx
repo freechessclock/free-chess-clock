@@ -1,6 +1,8 @@
 import { Fragment } from 'preact'
+import { ChangeEvent } from 'preact/compat';
 import { Dialog, Switch, Transition } from '@headlessui/react'
 import classNames from 'classnames';
+import { useTranslation } from 'react-i18next';
 
 interface SettingsProps {
   minutes_per_player1: number;
@@ -17,21 +19,21 @@ interface SettingsProps {
   setOpen: (val: boolean) => void;
 }
 export default function Settings(props: SettingsProps) {
-
+  const { t, i18n } = useTranslation();
 
   const player_2_time = (
     <div className='col-span-2 place-self-center w-full' >
       <label htmlFor="minutes2" className="block text-sm font-medium text-neutral-300">
-        Minutes for player 2
+        {t("player2-minutes-label")}
       </label>
       <div className="mt-1">
         <input
           type="number"
           name="minutes2"
           id="minutes2"
-          onChange={(event) => {
-            if (event.target.value) {
-              props.setMinutesPerPlayer2(parseInt(event.target.value))
+          onChange={(event: ChangeEvent<HTMLInputElement>) => {
+            if (event.currentTarget.value) {
+              props.setMinutesPerPlayer2(parseInt(event.currentTarget.value))
             }
           }}
           value={props.minutes_per_player2}
@@ -43,53 +45,55 @@ export default function Settings(props: SettingsProps) {
   )
   return (
     <Transition.Root show={props.open} as={Fragment}>
-      <Dialog as="div" className="relative z-10" onClose={props.setOpen}>
-        <Transition.Child
-          as={Fragment}
-          enter="ease-out duration-300"
-          enterFrom="opacity-0"
-          enterTo="opacity-100"
-          leave="ease-in duration-200"
-          leaveFrom="opacity-100"
-          leaveTo="opacity-0"
-        >
-          <div className="fixed inset-0 bg-black bg-opacity-90 transition-opacity" />
-        </Transition.Child>
+      <Dialog as={Fragment} onClose={props.setOpen}>
+        <div className="relative z-10">
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="fixed inset-0 bg-black bg-opacity-90 transition-opacity" />
+          </Transition.Child>
 
-        <div className="fixed inset-0 z-10 overflow-y-auto text-neutral-100">
-          <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-            <Transition.Child
-              as={Fragment}
-              enter="ease-out duration-300"
-              enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-              enterTo="opacity-100 translate-y-0 sm:scale-100"
-              leave="ease-in duration-200"
-              leaveFrom="opacity-100 translate-y-0 sm:scale-100"
-              leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-            >
-              <Dialog.Panel className="relative transform overflow-hidden bg-neutral-800 rounded-lg px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-xl sm:p-6">
-                <div>
-                  <div className="mt-3 ">
-                    <Dialog.Title as="h3" className="text-xl lg:text-3xl font-medium leading-6 text-center">
-                      Settings
+          <div className="fixed inset-0 z-10 overflow-y-auto text-neutral-100">
+            <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                enterTo="opacity-100 translate-y-0 sm:scale-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100 translate-y-0 sm:scale-100"
+                leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+              >
+                <Dialog.Panel className="relative transform overflow-hidden bg-neutral-800 rounded-lg px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-xl sm:p-6">
+                  <div className="mt-3">
+                    <Dialog.Title as={Fragment}>
+                      <h3 className="text-xl lg:text-3xl font-medium leading-6 text-center">
+                        {t('settings-title')}
+                      </h3>
                     </Dialog.Title>
                     <div className="mt-6 grid gap-6 lg:gap-x-10 grid-cols-4 justify-items-start">
                       <div className='col-span-2 place-self-center w-full' >
                         <label htmlFor="minutes1" className="block text-sm font-medium text-neutral-300">
-                          {props.different_time ? "Minutes for player 1" : "Minutes per player"}
+                          {props.different_time ? t("player2-minutes-label") : t("minutes-label")}
                         </label>
                         <div className="mt-1">
                           <input
                             type="number"
                             name="minutes1"
                             id="minutes1"
-                            onChange={(event) => {
-                              if (event.target.value) {
+                            onChange={(event: ChangeEvent<HTMLInputElement>) => {
+                              if (event.currentTarget.value) {
                                 if (props.different_time) {
-                                  props.setMinutesPerPlayer1(parseInt(event.target.value))
+                                  props.setMinutesPerPlayer1(parseInt(event.currentTarget.value))
                                 } else {
-                                  props.setMinutesPerPlayer1(parseInt(event.target.value))
-                                  props.setMinutesPerPlayer2(parseInt(event.target.value))
+                                  props.setMinutesPerPlayer1(parseInt(event.currentTarget.value))
+                                  props.setMinutesPerPlayer2(parseInt(event.currentTarget.value))
                                 }
                               }
                             }}
@@ -101,16 +105,16 @@ export default function Settings(props: SettingsProps) {
                       </div>
                       <div className='col-span-2 place-self-center w-full'>
                         <label htmlFor="seconds" className="block text-sm font-medium text-neutral-300">
-                          Extra seconds per turn
+                          {t("increment-label")}
                         </label>
                         <div className="mt-1">
                           <input
                             type="number"
                             name="seconds"
                             id="seconds"
-                            onChange={(event) => {
-                              if (event.target.value) {
-                                props.setExtraSeconds(parseInt(event.target.value))
+                            onChange={(event: ChangeEvent<HTMLInputElement>) => {
+                              if (event.currentTarget.value) {
+                                props.setExtraSeconds(parseInt(event.currentTarget.value))
                               }
                             }}
                             value={props.extra_seconds}
@@ -121,8 +125,10 @@ export default function Settings(props: SettingsProps) {
                       </div>
                       {props.different_time && player_2_time}
                       <Switch.Group as={Fragment}>
-                        <Switch.Label as="div" className="col-span-3">
-                          <span className="text-sm font-medium ">Different times per player</span>
+                        <Switch.Label as={Fragment}>
+                          <div className="col-span-3">
+                            <span className="text-sm font-medium ">{t("different-times-label")}</span>
+                          </div>
                         </Switch.Label>
                         <Switch
                           checked={props.different_time}
@@ -142,9 +148,11 @@ export default function Settings(props: SettingsProps) {
                         </Switch>
                       </Switch.Group>
                       <Switch.Group as={Fragment}>
-                        <Switch.Label as="div" className="col-span-3">
-                          <span className="text-sm font-medium ">Sound notifications</span>
-                          <div className="text-sm mt-1 text-gray-500">A sound is played when the clock is switched and when the game is over</div>
+                        <Switch.Label as={Fragment}>
+                          <div className="col-span-3">
+                            <span className="text-sm font-medium ">{t("sound-notification-label")}</span>
+                            <div className="text-sm mt-1 text-gray-500">{t("sound-notification-sublabel")}</div>
+                          </div>
                         </Switch.Label>
                         <Switch
                           checked={props.notifications}
@@ -164,22 +172,22 @@ export default function Settings(props: SettingsProps) {
                         </Switch>
                       </Switch.Group>
                       <div className='hidden lg:block col-span-4 text-center px-8'>
-                        Click either clock to start and then press any keyboard character key (A-Z) or the Space bar to switch the clock.
+                        {t("keyboard-instructions")}
                       </div>
                     </div>
                   </div>
-                </div>
-                <div className="mt-5 sm:mt-6">
-                  <button
-                    type="button"
-                    className="inline-flex w-full justify-center rounded-md border border-transparent bg-neutral-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-neutral-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                    onClick={() => props.setOpen(false)}
-                  >
-                    Done
-                  </button>
-                </div>
-              </Dialog.Panel>
-            </Transition.Child>
+                  <div className="mt-5 sm:mt-6">
+                    <button
+                      type="button"
+                      className="inline-flex w-full justify-center rounded-md border border-transparent bg-neutral-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-neutral-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                      onClick={() => props.setOpen(false)}
+                    >
+                      {t("done-button")}
+                    </button>
+                  </div>
+                </Dialog.Panel>
+              </Transition.Child>
+            </div>
           </div>
         </div>
       </Dialog>

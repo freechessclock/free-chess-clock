@@ -12,8 +12,12 @@
     "@headlessui/react": "^1.7.11",
     "@heroicons/react": "^2.0.16",
     "classnames": "^2.3.2",
+    "i18next": "^22.4.12",
+    "i18next-browser-languagedetector": "^7.0.1",
+    "i18next-http-backend": "^2.2.0",
     "preact": "^10.11.3",
-    "react-countdown": "^2.3.5"
+    "react-countdown": "^2.3.5",
+    "react-i18next": "^12.2.0"
   },
   "devDependencies": {
     "@preact/preset-vite": "^2.5.0",
