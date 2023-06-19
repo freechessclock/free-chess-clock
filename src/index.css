@@ -1,3 +1,32 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+.blink-bg{
+  animation: blinkingBackground 4s;
+}
+
+@keyframes blinkingBackground{
+  0%		{ background-color: #0ea5e9;}
+  5%		{ background-color: #404040;}
+  10%		{ background-color: #0ea5e9;}
+  15%		{ background-color: #404040;}
+  20%		{ background-color: #0ea5e9;}
+  25%		{ background-color: #404040;}
+  30%		{ background-color: #0ea5e9;}
+  35%		{ background-color: #404040;}
+  40%		{ background-color: #0ea5e9;}
+  45%		{ background-color: #404040;}
+  50%		{ background-color: #0ea5e9;}
+  55%		{ background-color: #404040;}
+  60%		{ background-color: #0ea5e9;}
+  65%		{ background-color: #404040;}
+  70%		{ background-color: #0ea5e9;}
+  75%		{ background-color: #404040;}
+  80%		{ background-color: #0ea5e9;}
+  85%		{ background-color: #404040;}
+  90%		{ background-color: #0ea5e9;}
+  95%		{ background-color: #404040;}
+  100%		{ background-color: #0ea5e9;}
+}

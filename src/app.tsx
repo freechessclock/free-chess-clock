@@ -24,7 +24,7 @@ export default function App() {
   const [paused, setPaused] = useState(true);
   const [time1, setTime1] = useState<number>(minutes_per_player1 * MINUTES_TO_MILLISECONDS);
   const [time2, setTime2] = useState<number>(minutes_per_player2 * MINUTES_TO_MILLISECONDS);
-  const [played_sound, setPlayedSound] = useState(false);
+  const [game_ended, setGameEnded] = useState(false);
   const [inc1, setInc1] = useState(false);
   const [inc2, setInc2] = useState(false);
   const [dec1, setDec1] = useState(false);
@@ -40,6 +40,7 @@ export default function App() {
 
   useEffect(() => {
     const touchRegister = () => {
+      console.log("register");
       if (notifications) {
         alarm.current?.load();
         click.current?.load();
@@ -47,6 +48,7 @@ export default function App() {
     }
 
     const playClick = () => {
+      console.log("click");
       if (notifications) {
         click.current?.play()
       }
@@ -111,12 +113,13 @@ export default function App() {
         }
       }, UPDATE_INTERVAL);
 
-    if (started && alarm.current && !played_sound && (time1 <= 0 || time2 <= 0)) {
+    if (started && alarm.current && !game_ended && (time1 <= 0 || time2 <= 0)) {
+      console.log("alarm");
       alarm.current?.play();
-      setPlayedSound(true);
+      setGameEnded(true);
     }
     return () => { clearTimeout(timeout) };
-  }, [started, paused, time1, time2, played_sound])
+  }, [started, paused, time1, time2, game_ended])
 
   useEffect(() => {
     setTime1(minutes_per_player1 * MINUTES_TO_MILLISECONDS);
@@ -189,7 +192,7 @@ export default function App() {
 
   const reset = () => {
     setPaused(true);
-    setPlayedSound(false);
+    setGameEnded(false);
     setStarted(false);
     setTime1(minutes_per_player1 * MINUTES_TO_MILLISECONDS);
     setTime2(minutes_per_player2 * MINUTES_TO_MILLISECONDS);
@@ -220,7 +223,7 @@ export default function App() {
   );
   return (
     <Suspense fallback={<div className="bg-neutral-700 w-screen h-screen" />}>
-      <div className='bg-neutral-700 w-screen h-screen text-neutral-100'
+      <div className={classNames('bg-neutral-700 w-screen h-screen text-neutral-100', { "blink-bg": game_ended })}
         style={{ maxHeight: "-webkit-fill-available" }}
       >
         <audio ref={click}>
@@ -248,7 +251,8 @@ export default function App() {
             ref={button1}
             aria-label="Switch turn to Player 1"
             className={classNames('rotate-180 lg:rotate-0 p-4 grow w-full flex items-center justify-center h-full  rounded-xl',
-              started && turn ? "bg-neutral-800" : "bg-neutral-300 text-neutral-800 drop-shadow-lg"
+              (started && turn) || game_ended ? "bg-neutral-800" : "bg-neutral-300 text-neutral-800 drop-shadow-lg",
+              { "blink-bg": game_ended }
             )}
             onClick={() => {
               setTurn(true)
@@ -258,7 +262,7 @@ export default function App() {
               setStarted(true);
               setPaused(false);
             }}
-            disabled={started && turn}
+            disabled={(started && turn) || game_ended}
           >
             <Countdown
               ref={countdown1}
@@ -275,7 +279,8 @@ export default function App() {
             ref={button2}
             aria-label="Switch turn to Player 2"
             className={classNames('p-4 grow w-full flex items-center justify-center h-full  rounded-xl',
-              started && !turn ? "bg-neutral-800" : "bg-neutral-300 text-neutral-800 shadow-lg"
+              (started && !turn) || game_ended ? "bg-neutral-800" : "bg-neutral-300 text-neutral-800 shadow-lg",
+              { "blink-bg": game_ended }
             )}
             onClick={() => {
               setTurn(false);
@@ -285,7 +290,7 @@ export default function App() {
               setStarted(true);
               setPaused(false);
             }}
-            disabled={started && !turn}
+            disabled={(started && !turn) || game_ended}
           >
             <Countdown
               ref={countdown2}
