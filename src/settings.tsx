@@ -77,99 +77,101 @@ export default function Settings(props: SettingsProps) {
                         {t('settings-title')}
                       </h3>
                     </Dialog.Title>
-                    <div className="mt-6 grid gap-6 lg:gap-x-10 grid-cols-4 justify-items-start">
-                      <div className='col-span-2 place-self-center w-full' >
+                    <div className="mt-6 grid gap-y-2 gap-x-4 lg:gap-x-10 grid-cols-4 justify-items-start">
+                      <div className='col-span-2  w-full'>
                         <label htmlFor="minutes1" className="block text-sm font-medium text-neutral-300">
-                          {props.different_time ? t("player2-minutes-label") : t("minutes-label")}
+                          {props.different_time ? t("player1-minutes-label") : t("minutes-label")}
                         </label>
-                        <div className="mt-1">
-                          <input
-                            type="number"
-                            name="minutes1"
-                            id="minutes1"
-                            onChange={(event: ChangeEvent<HTMLInputElement>) => {
-                              if (event.currentTarget.value) {
-                                if (props.different_time) {
-                                  props.setMinutesPerPlayer1(parseInt(event.currentTarget.value))
-                                } else {
-                                  props.setMinutesPerPlayer1(parseInt(event.currentTarget.value))
-                                  props.setMinutesPerPlayer2(parseInt(event.currentTarget.value))
-                                }
-                              }
-                            }}
-                            value={props.minutes_per_player1}
-                            className="block w-full rounded-md bg-neutral-800 border-gray-300 shadow-sm focus:border-neutral-500 focus:ring-neutral-500 sm:text-sm placeholder:text-neutral-500"
-                            placeholder=""
-                          />
-                        </div>
                       </div>
-                      <div className='col-span-2 place-self-center w-full'>
+                      <div className='col-span-2  w-full'>
                         <label htmlFor="seconds" className="block text-sm font-medium text-neutral-300">
                           {t("increment-label")}
                         </label>
-                        <div className="mt-1">
-                          <input
-                            type="number"
-                            name="seconds"
-                            id="seconds"
-                            onChange={(event: ChangeEvent<HTMLInputElement>) => {
-                              if (event.currentTarget.value) {
-                                props.setExtraSeconds(parseInt(event.currentTarget.value))
+                      </div>
+                      <div className='col-span-2 w-full'>
+                        <input
+                          type="number"
+                          name="minutes1"
+                          id="minutes1"
+                          onChange={(event: ChangeEvent<HTMLInputElement>) => {
+                            if (event.currentTarget.value) {
+                              if (props.different_time) {
+                                props.setMinutesPerPlayer1(parseInt(event.currentTarget.value))
+                              } else {
+                                props.setMinutesPerPlayer1(parseInt(event.currentTarget.value))
+                                props.setMinutesPerPlayer2(parseInt(event.currentTarget.value))
                               }
-                            }}
-                            value={props.extra_seconds}
-                            className="block w-full rounded-md bg-neutral-800 border-gray-300 shadow-sm focus:border-neutral-500 focus:ring-neutral-500 sm:text-sm placeholder:text-neutral-500"
-                            placeholder=""
-                          />
-                        </div>
+                            }
+                          }}
+                          value={props.minutes_per_player1}
+                          className="block w-full rounded-md bg-neutral-800 border-gray-300 shadow-sm focus:border-neutral-500 focus:ring-neutral-500 sm:text-sm placeholder:text-neutral-500"
+                          placeholder=""
+                        />
+                      </div>
+                      <div className='col-span-2 w-full'>
+                        <input
+                          type="number"
+                          name="seconds"
+                          id="seconds"
+                          onChange={(event: ChangeEvent<HTMLInputElement>) => {
+                            if (event.currentTarget.value) {
+                              props.setExtraSeconds(parseInt(event.currentTarget.value))
+                            }
+                          }}
+                          value={props.extra_seconds}
+                          className="block w-full rounded-md bg-neutral-800 border-gray-300 shadow-sm focus:border-neutral-500 focus:ring-neutral-500 sm:text-sm placeholder:text-neutral-500"
+                          placeholder=""
+                        />
                       </div>
                       {props.different_time && player_2_time}
                       <Switch.Group as={Fragment}>
-                        <Switch.Label as={Fragment}>
-                          <div className="col-span-3">
+                        <div className="col-span-4 mt-4 flex justify-between w-full">
+                          <Switch.Label as={Fragment}>
                             <span className="text-sm font-medium ">{t("different-times-label")}</span>
-                          </div>
-                        </Switch.Label>
-                        <Switch
-                          checked={props.different_time}
-                          onChange={props.setDifferentTime}
-                          className={classNames(
-                            props.different_time ? 'bg-indigo-600' : 'bg-gray-200',
-                            'relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-neutral-500 focus:ring-offset-2'
-                          )}
-                        >
-                          <span
-                            aria-hidden="true"
+                          </Switch.Label>
+                          <Switch
+                            checked={props.different_time}
+                            onChange={props.setDifferentTime}
                             className={classNames(
-                              props.different_time ? 'translate-x-5' : 'translate-x-0',
-                              'pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out'
+                              props.different_time ? 'bg-indigo-600' : 'bg-gray-200',
+                              'relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-neutral-500 focus:ring-offset-2'
                             )}
-                          />
-                        </Switch>
+                          >
+                            <span
+                              aria-hidden="true"
+                              className={classNames(
+                                props.different_time ? 'translate-x-5' : 'translate-x-0',
+                                'pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out'
+                              )}
+                            />
+                          </Switch>
+                        </div>
                       </Switch.Group>
                       <Switch.Group as={Fragment}>
-                        <Switch.Label as={Fragment}>
-                          <div className="col-span-3">
-                            <span className="text-sm font-medium ">{t("sound-notification-label")}</span>
-                            <div className="text-sm mt-1 text-gray-500">{t("sound-notification-sublabel")}</div>
-                          </div>
-                        </Switch.Label>
-                        <Switch
-                          checked={props.notifications}
-                          onChange={props.setNotifications}
-                          className={classNames(
-                            props.notifications ? 'bg-indigo-600' : 'bg-gray-200',
-                            'relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-neutral-500 focus:ring-offset-2'
-                          )}
-                        >
-                          <span
-                            aria-hidden="true"
+                        <div className="col-span-4 mt-4 flex justify-between w-full">
+                          <Switch.Label as={Fragment}>
+                            <div>
+                              <span className="text-sm font-medium ">{t("sound-notification-label")}</span>
+                              <div className="text-sm mt-1 text-gray-500">{t("sound-notification-sublabel")}</div>
+                            </div>
+                          </Switch.Label>
+                          <Switch
+                            checked={props.notifications}
+                            onChange={props.setNotifications}
                             className={classNames(
-                              props.notifications ? 'translate-x-5' : 'translate-x-0',
-                              'pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out'
+                              props.notifications ? 'bg-indigo-600' : 'bg-gray-200',
+                              'relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-neutral-500 focus:ring-offset-2'
                             )}
-                          />
-                        </Switch>
+                          >
+                            <span
+                              aria-hidden="true"
+                              className={classNames(
+                                props.notifications ? 'translate-x-5' : 'translate-x-0',
+                                'pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out'
+                              )}
+                            />
+                          </Switch>
+                        </div>
                       </Switch.Group>
                       <div className='hidden lg:block col-span-4 text-center px-8'>
                         {t("keyboard-instructions")}
